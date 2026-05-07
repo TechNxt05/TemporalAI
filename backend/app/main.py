@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api import endpoints
+from app.api.routes import simulation, copilot
 from app.db.database import engine, Base
 import logging
 
@@ -31,6 +32,8 @@ def on_startup():
 
 # Include routers
 app.include_router(endpoints.router, prefix="/api")
+app.include_router(simulation.router, prefix="/api/simulation")
+app.include_router(copilot.router, prefix="/api/copilot")
 
 @app.get("/")
 def read_root():
