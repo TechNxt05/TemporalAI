@@ -17,12 +17,16 @@ class VectorStore:
         if not self.api_key:
             return np.zeros(self.dimension, dtype=np.float32)
             
-        result = genai.embed_content(
-            model="models/embedding-001",
-            content=text,
-            task_type="retrieval_document",
-        )
-        return np.array(result['embedding'], dtype=np.float32)
+        try:
+            result = genai.embed_content(
+                model="models/text-embedding-004",
+                content=text,
+                task_type="retrieval_document",
+            )
+            return np.array(result['embedding'], dtype=np.float32)
+        except Exception as e:
+            print(f"Warning: Failed to generate embedding: {e}")
+            return np.zeros(self.dimension, dtype=np.float32)
 
     def add_memory(self, text: str, metadata: dict = None):
         """
