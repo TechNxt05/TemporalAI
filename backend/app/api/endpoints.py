@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, UploadFile, File
 from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.db.models import ModelRegistry
@@ -7,6 +7,7 @@ from app.agents.insight_agent import InsightAgent
 from app.core.config import settings
 import json
 import os
+import shutil
 
 router = APIRouter()
 
@@ -21,10 +22,36 @@ def get_forecasts_data():
 def train_models(background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     def run_pipeline():
         pipeline = TrainingPipeline(db)
-        pipeline.run()
+        pipeline.run(data_path=settings.DATA_PATH)
         
     background_tasks.add_task(run_pipeline)
-    return {"message": "Training started in background. Check /metrics or /compare later."}
+    return {"message": "Training started in background using default dataset."}
+
+@router.post("/upload")
+async def upload_dataset(background_tasks: BackgroundTasks, file: UploadFile = File(...), db: Session = Depends(get_db)):
+    os.makedirs(settings.MODELS_DIR, exist_ok=True)
+    file_path = os.path.join(settings.MODELS_DIR, file.filename)
+    
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+        
+    def run_pipeline():
+        pipeline = TrainingPipeline(db)
+        pipeline.run(data_path=file_path)
+        
+    background_tasks.add_task(run_pipeline)
+    return {"message": f"File {file.filename} uploaded successfully. Training started in background."}
+
+@router.post("/fetch-external")
+def fetch_external_dataset(background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    # In a real app, this would use pandas_datareader or requests to fetch live data.
+    # For now, we simulate by running on the default path but communicating a different intent.
+    def run_pipeline():
+        pipeline = TrainingPipeline(db)
+        pipeline.run(data_path=settings.DATA_PATH)
+        
+    background_tasks.add_task(run_pipeline)
+    return {"message": "Simulated fetching external Real-World Data. Training started."}
 
 @router.post("/retrain")
 def retrain_models(background_tasks: BackgroundTasks, db: Session = Depends(get_db)):

@@ -12,12 +12,15 @@ import datetime
 class TrainingPipeline:
     def __init__(self, db: Session):
         self.db = db
-        self.data_agent = DataAgent(settings.DATA_PATH)
         self.feature_agent = FeatureAgent()
         self.selector_agent = SelectorAgent(db)
 
-    def run(self):
-        print("Starting training pipeline...")
+    def run(self, data_path: str = None):
+        if data_path is None:
+            data_path = settings.DATA_PATH
+            
+        print(f"Starting training pipeline with dataset: {data_path}")
+        self.data_agent = DataAgent(data_path)
         df = self.data_agent.load_and_clean()
         states = df['state'].unique()
         

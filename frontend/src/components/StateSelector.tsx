@@ -18,12 +18,12 @@ export default function StateSelector({ selectedState, onStateChange }: { select
   }, []);
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-      <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Select Region</h3>
+    <div className="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/40 transition-all duration-300">
+      <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Select Region</h3>
       <select 
         value={selectedState} 
         onChange={(e) => onStateChange(e.target.value)}
-        className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white/50 backdrop-blur-sm"
       >
         <option value="">-- Choose a State --</option>
         {states.map(s => (

@@ -7,7 +7,10 @@ class DataAgent:
 
     def load_and_clean(self) -> pd.DataFrame:
         # Load data
-        df = pd.read_excel(self.data_path)
+        if self.data_path.lower().endswith('.csv'):
+            df = pd.read_csv(self.data_path)
+        else:
+            df = pd.read_excel(self.data_path)
         
         # Standardize column names
         df.columns = [col.lower() for col in df.columns]

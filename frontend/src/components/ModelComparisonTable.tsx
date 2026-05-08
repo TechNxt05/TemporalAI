@@ -9,7 +9,7 @@ export default function ModelComparisonTable({ state }: { state: string }) {
   useEffect(() => {
     if (!state) return;
     
-    axios.get(`http://localhost:8000/api/compare?state=${state}`)
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/compare?state=${state}`)
       .then(res => {
         setModels(res.data);
       })
@@ -20,8 +20,8 @@ export default function ModelComparisonTable({ state }: { state: string }) {
   if (models.length === 0) return null;
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-      <h3 className="text-lg font-semibold text-gray-800 mb-4">Model Performance ({state})</h3>
+    <div className="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-white/40 overflow-hidden transition-all duration-300">
+      <h3 className="text-lg font-bold text-slate-800 mb-4">Model Performance ({state})</h3>
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
