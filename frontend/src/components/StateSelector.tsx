@@ -8,7 +8,7 @@ export default function StateSelector({ selectedState, onStateChange }: { select
   
   useEffect(() => {
     // In a real app we'd have a /states endpoint, but here we can just get metrics and extract keys
-    axios.get("http://localhost:8000/api/metrics")
+    axios.get(/api/metrics)
       .then(res => {
         if (res.data && !res.data.message) {
           setStates(Object.keys(res.data));
