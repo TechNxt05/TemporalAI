@@ -9,6 +9,7 @@ export default function DataIngestionPanel({ onTrainStart }: { onTrainStart: () 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [apiKey, setApiKey] = useState("");
 
   const handleDemoTrain = async () => {
     setLoading(true);
@@ -144,10 +145,20 @@ export default function DataIngestionPanel({ onTrainStart }: { onTrainStart: () 
             <p className="text-sm text-slate-500 text-center px-4 leading-relaxed">
               Connect to live external APIs (e.g., global economic indicators) to dynamically fetch current data and run predictive modeling.
             </p>
+            <div className="w-full mt-4">
+              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Provider API Key (Optional)</label>
+              <input 
+                type="password" 
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                placeholder="sk-..."
+                className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white/50 backdrop-blur-sm transition-all"
+              />
+            </div>
             <button
               onClick={handleExternalTrain}
               disabled={loading}
-              className="w-full mt-2 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-xl font-semibold shadow-md shadow-emerald-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full mt-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-xl font-semibold shadow-md shadow-emerald-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading ? "Fetching & Training..." : "Fetch Live Data & Train"}
             </button>
