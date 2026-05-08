@@ -26,7 +26,7 @@ export default function SimulationPage() {
     if (!selectedState) return;
     setLoading(true);
     try {
-      const res = await axios.post(/api/simulation/simulate, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/simulation/simulate`, {
         state: selectedState,
         scenario: { demand_multiplier: multiplier, event: event }
       });

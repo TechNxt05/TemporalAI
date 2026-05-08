@@ -29,7 +29,7 @@ export default function ChatBox() {
     setLoading(true);
 
     try {
-      const res = await axios.post(/api/copilot/chat, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/copilot/chat`, {
         query: userMsg
       });
       

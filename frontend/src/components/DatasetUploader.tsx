@@ -12,7 +12,7 @@ export default function DatasetUploader({ onTrainStart }: { onTrainStart: () => 
     setLoading(true);
     setMessage("");
     try {
-      const res = await axios.post(/api/train);
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/train`);
       setMessage(res.data.message || "Training started successfully!");
       onTrainStart();
     } catch (err: any) {
